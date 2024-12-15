@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import multer from 'multer';
 import path from 'path';
 
-// Configuração do multer para salvar as imagens
+// multer para salvar as imagens
 const upload = multer({
   dest: 'uploads/', // Diretório onde as imagens serão armazenadas
   fileFilter: (req, file, cb) => {
@@ -19,15 +19,13 @@ const app = express();
 app.use(express.json());
 app.use('/uploads', express.static('uploads')); // Serve as imagens estáticas
 
-// Endpoint POST para adicionar produtos com foto
+// POST 
 app.post('/produtos', upload.single('foto'), async (req, res) => {
   try {
     const { nome, descricao, quantidade } = req.body;
 
-    // Converte a quantidade para inteiro
     const quantidadeInt = parseInt(quantidade, 10);
 
-    // Verifica se a conversão foi bem-sucedida
     if (isNaN(quantidadeInt)) {
       return res.status(400).json({ error: 'Quantidade deve ser um número válido.' });
     }
@@ -52,7 +50,7 @@ app.post('/produtos', upload.single('foto'), async (req, res) => {
 
 
 
-// Endpoint GET para listar produtos, incluindo foto
+// GET
 app.get('/produtos', async (req, res) => {
   try {
     const produtos = await prisma.produto.findMany();
@@ -64,7 +62,7 @@ app.get('/produtos', async (req, res) => {
 });
 
 
-// Endpoint PUT para atualizar um produto com foto
+// PUT 
 app.put('/produtos/:id', upload.single('foto'), async (req, res) => {
   try {
     const { id } = req.params;  // id já é uma string
@@ -90,7 +88,7 @@ app.put('/produtos/:id', upload.single('foto'), async (req, res) => {
   }
 });
 
-// Endpoint DELETE para deletar um produto
+// DELETE 
 app.delete('/produtos/:id', async (req, res) => {
   try {
     const { id } = req.params;  // id já é uma string
@@ -109,7 +107,6 @@ app.delete('/produtos/:id', async (req, res) => {
 });
 
 
-// Inicializa o servidor
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
 });
